@@ -2,6 +2,8 @@ virtualmachines:
   hosts:
     vm01:
       ansible_host: 192.168.123.187
-
+      ansible_become: yes
+      ansible_become_method: sudo
+      ansible_become_pass: 123
   vars:
     ansible_user: csaaguest      

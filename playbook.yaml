@@ -20,10 +20,7 @@
         EOF
 
    - name: Unconditionally reboot the machine with all defaults
-     command: echo 'test'
-     become: true
-     become_method: sudo
-     become_password: 123
+     ansible.builtin.reboot:
 
   vars:
     email: ze@uol.com
