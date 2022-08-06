@@ -7,4 +7,14 @@ virtualmachines:
       ansible_become_method: sudo
       ansible_become_pass: 123
   vars:
-    ansible_user: csaaguest      
+    ansible_user: csaaguest
+    email: ze@uol.com
+    name: ze
+    token: token123    
+    os_environment:
+      - key: CSAA_EMAIL
+        value: "{{ email }}"
+      - key: CSAA_NAME
+        value: "{{ name }}"
+      - key: CSAA_GITHUB_TOKEN
+        value: "{{ token }}"

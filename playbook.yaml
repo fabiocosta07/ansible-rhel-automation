@@ -9,17 +9,14 @@
 
   tasks:
    - name: config csaa vars
-     ansible.builtin.shell:
-       cmd: |
-        cat <<EOF >> ~/.bashrc
-
-        # CSAA Environment Variables
-        export CSAA_EMAIL="{{ email }}"
-        export CSAA_NAME="<NAME>"
-        export CSAA_GITHUB_TOKEN="<GITHUB_TOKEN>"
-        EOF
-
-   - name: Print to stdout
+     ansible.builtin.lineinfile:
+       dest: "~/.bashrc"
+       state: present
+       regexp: "^{{ item.key }}="
+       line: "export {{ item.key }}={{ item.value }}"
+     with_items: "{{ os_environment }}"
+         
+   - name: Print bashrc
      command: cat ~/.bashrc
      register: out
 
@@ -28,7 +25,7 @@
    - name: Reset ssh connection to allow user changes to affect
      ansible.builtin.meta: reset_connection
 
-   - name: Print to stdout
+   - name: Print env vars
      command: echo "hello"
      register: out
 
@@ -37,5 +34,13 @@
 #  - name: Unconditionally reboot the machine with all defaults
 #     ansible.builtin.reboot:
 
-  vars:
-    email: ze@uol.com
+#   - name: config csaa vars
+#     ansible.builtin.shell:
+#       cmd: |
+#        cat <<EOF >> ~/.bashrc
+#
+#        # CSAA Environment Variables
+#        export CSAA_EMAIL="{{ email }}"
+#        export CSAA_NAME="<NAME>"
+#        export CSAA_GITHUB_TOKEN="<GITHUB_TOKEN>"
+#        EOF
