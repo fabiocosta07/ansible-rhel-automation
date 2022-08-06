@@ -19,8 +19,23 @@
         export CSAA_GITHUB_TOKEN="<GITHUB_TOKEN>"
         EOF
 
-   - name: Unconditionally reboot the machine with all defaults
-     ansible.builtin.reboot:
+   - name: Print to stdout
+     command: cat ~/.bashrc
+     register: out
+
+   - debug: var=out.stdout_lines
+
+   - name: Reset ssh connection to allow user changes to affect
+     ansible.builtin.meta: reset_connection
+
+   - name: Print to stdout
+     command: echo "hello"
+     register: out
+
+   - debug: var=out.stdout_lines
+
+#  - name: Unconditionally reboot the machine with all defaults
+#     ansible.builtin.reboot:
 
   vars:
     email: ze@uol.com
