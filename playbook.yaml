@@ -108,6 +108,108 @@
         [status]
                 showUntrackedFiles = no
 
+   - name: Install AWS CLI 1
+     ansible.builtin.shell: |
+       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+       unzip awscliv2.zip
+
+   - name: Install AWS CLI 2
+     ansible.builtin.shell: |
+       ./aws/install
+     become: yes
+
+   - name: Install AWS CLI 3
+     ansible.builtin.shell: |
+       rm -rf aws awscliv2.zip
+       mkdir ~/.aws
+
+   - name: AWS CLI configuration
+     ansible.builtin.blockinfile:
+       path: ~/.ssh/config
+       block: |
+        [default]
+        region=us-west-2
+        output=json
+
+        [profile SSO-EzQuoteDeveloperRole]
+        region=us-west-2
+        output=json
+
+        [profile SSO-WebMyPolicyDeveloperRole]
+        region=us-west-2
+        output=json
+
+   - name: AWS CLI vars configuration
+     ansible.builtin.lineinfile:
+       dest: "~/.bashrc"
+       state: present
+       regexp: "^{{ item.key }}="
+       line: "export {{ item.key }}={{ item.value }}"
+     with_items: "{{ aws_environment }}"
+
+   - name: Install AWS SAM 1
+     ansible.builtin.shell: |
+       wget "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip"
+       unzip aws-sam-cli-linux-x86_64.zip -d sam-installation
+
+   - name: Install AWS SAM 2
+     ansible.builtin.shell: |
+       ./sam-installation/install
+     become: yes
+
+   - name: Install AWS SAM 3
+     ansible.builtin.shell: |
+       rm -rf sam-installation aws-sam-cli-linux-x86_64.zip
+
+   - name: Install gimme-aws-creds
+     ansible.builtin.shell: |
+       python3 -m pip install --upgrade pip --user
+       python3 -m pip install --upgrade gimme-aws-creds --user
+
+   - name: Remove the default docker packages
+     ansible.builtin.package:
+       name:
+         - docker
+         - docker-client
+         - docker-client-latest
+         - docker-common
+         - docker-latest
+         - docker-latest-logrotate
+         - docker-logrotate
+         - docker-engine
+       state: absent
+     become: yes
+
+   - name: Install yum-utils
+     ansible.builtin.package:
+       name:
+         - yum-utils 
+       state: present
+     become: yes
+
+   - name: Add docker repo
+     ansible.builtin.shell: |
+       yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+     become: yes     
+
+   - name: Install the docker packages
+     ansible.builtin.package:
+       name:
+         - docker-ce 
+         - docker-ce-cli 
+         - containerd.io
+       state: present
+     become: yes
+
+   - name: config docker 
+     ansible.builtin.shell: |
+       usermod -aG docker $USER
+       systemctl enable docker
+       systemctl start docker
+       docker network create lambda-local
+     become: yes     
+
+
 #  - name: Unconditionally reboot the machine with all defaults
 #     ansible.builtin.reboot:
 

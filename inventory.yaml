@@ -17,3 +17,9 @@ virtualmachines:
         value: "{{ name }}"
       - key: CSAA_GITHUB_TOKEN
         value: "{{ token }}"
+    aws_environment:
+      - key: AWS_PROFILE
+        value: SSO-WebMyPolicyDeveloperRole
+      - key: AWS_DEFAULT_REGION
+        value: us-west-2
+
