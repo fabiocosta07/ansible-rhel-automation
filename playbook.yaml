@@ -161,6 +161,13 @@
      ansible.builtin.shell: |
        rm -rf sam-installation aws-sam-cli-linux-x86_64.zip
 
+   - name: Install python3
+     ansible.builtin.package:
+       name:
+         - python3
+       state: present
+     become: yes
+
    - name: Install gimme-aws-creds
      ansible.builtin.shell: |
        python3 -m pip install --upgrade pip --user
@@ -207,7 +214,7 @@
        systemctl enable docker
        systemctl start docker
        docker network create lambda-local
-     become: yes     
+     become: yes
 
 
 #  - name: Unconditionally reboot the machine with all defaults
