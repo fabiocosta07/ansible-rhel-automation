@@ -1,4 +1,4 @@
-- name: My first play
+- name: MyQuote development environment automation
   hosts: virtualmachines
 
 #  vars_prompt:
@@ -216,14 +216,16 @@
        state: present
      become: yes
 
-   - name: config docker 
+   - name: Config docker
      ansible.builtin.shell: |
-       usermod -aG docker $USER
+       usermod -aG docker csaaguest
        systemctl enable docker
        systemctl start docker
        docker network create lambda-local
      become: yes
-     debugger: always
+
+   - name: Reset ssh connection to allow docker changes to affect
+     ansible.builtin.meta: reset_connection
 
 
 #  - name: Unconditionally reboot the machine with all defaults
