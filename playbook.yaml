@@ -173,6 +173,37 @@
        python3 -m pip install --upgrade pip --user
        python3 -m pip install --upgrade gimme-aws-creds --user
 
+   #TODO configure okta config file
+
+   - name: Install gcc-c++
+     ansible.builtin.package:
+       name:
+         - gcc-c++
+       state: present
+     become: yes
+
+   - name: Install nvm
+     ansible.builtin.shell: >
+      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+     args:
+       creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
+   - name: Install npm - lts/fermium
+     ansible.builtin.shell: |
+      source ~/.nvm/nvm.sh
+      nvm install lts/fermium
+
+   - name: Reset ssh connection to allow npm install to affect
+     ansible.builtin.meta: reset_connection
+
+   - name: Configure npm - lts/fermium
+     ansible.builtin.shell: |
+      npm set //npm.pkg.github.com/:_authToken ${CSAA_GITHUB_TOKEN}
+      npm completion >> ~/.bashrc
+
+   - name: Reset ssh connection to allow npm config to affect
+     ansible.builtin.meta: reset_connection
+
    - name: Remove the default docker packages
      ansible.builtin.package:
        name:
