@@ -223,6 +223,7 @@
        systemctl start docker
        docker network create lambda-local
      become: yes
+     debugger: always
 
 
 #  - name: Unconditionally reboot the machine with all defaults
