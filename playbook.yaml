@@ -194,6 +194,14 @@
        state: present
      become: yes
 
+   - name: Remove conflicting packages for docker
+     ansible.builtin.package:
+       name:
+         - podman
+         - buildah
+       state: absent
+     become: yes
+
    - name: Add docker repo
      ansible.builtin.shell: |
        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
