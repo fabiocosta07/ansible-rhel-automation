@@ -31,6 +31,6 @@ ansible-playbook -i inventory.yaml playbook.yaml --start-at-task="install packag
 
 ### Example of setting the debugger keyword on a task:
 
-- name: Execute a command
-  ansible.builtin.command: "false"
-  debugger: on_failed/always
+<p>- name: Execute a command<br>
+     ansible.builtin.command: "false"<br> 
+     debugger: on_failed/always </p>
