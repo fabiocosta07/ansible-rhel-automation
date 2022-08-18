@@ -85,10 +85,6 @@
        sh -c 'echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.conf'
      become: yes
 
-#   - name: Unconditionally reboot the machine with all defaults
-#     ansible.builtin.reboot:
-#     become: yes
-
    - name: Install the git package
      ansible.builtin.package:
        name:
@@ -193,7 +189,33 @@
        python3 -m pip install --upgrade pip --user
        python3 -m pip install --upgrade gimme-aws-creds --user
 
-   #TODO configure okta config file
+   - name: Create octa config file
+     ansible.builtin.file:
+       path: ~/.okta_aws_login_config
+       state: touch
+       mode: u=rw,g=r,o=r
+
+   - name: Add octa configuration to file
+     ansible.builtin.blockinfile:
+       path: ~/.okta_aws_login_config
+       block: |
+        okta_org_url = https://csaa.okta.com
+        okta_auth_server =
+        client_id =
+        gimme_creds_server = appurl
+        aws_appname =
+        aws_rolename = all
+        write_aws_creds = True
+        cred_profile = role
+        okta_username = {{ email }}
+        app_url = https://csaa.okta.com/home/amazon_aws/0oa1i1pttchsfI6u40h8/272
+        resolve_aws_alias = False
+        include_path = False
+        preferred_mfa_type = token:software:totp
+        remember_device = False
+        aws_default_duration = 3600
+        device_token =
+        output_format = json
 
    - name: Install gcc-c++
      ansible.builtin.package:
@@ -275,23 +297,3 @@
 
    - name: Reset ssh connection to allow docker changes to affect
      ansible.builtin.meta: reset_connection
-
-
-#  - name: Unconditionally reboot the machine with all defaults
-#     ansible.builtin.reboot:
-
-#   - name: config csaa vars
-#     ansible.builtin.shell:
-#       cmd: |
-#        cat <<EOF >> ~/.bashrc
-#
-#        # CSAA Environment Variables
-#        export CSAA_EMAIL="{{ email }}"
-#        export CSAA_NAME="<NAME>"
-#        export CSAA_GITHUB_TOKEN="<GITHUB_TOKEN>"
-#        EOF
-
-#   - name: Print env vars
-#     command: echo "hello"
-#     register: out
-#   - debug: var=out.stdout_lines

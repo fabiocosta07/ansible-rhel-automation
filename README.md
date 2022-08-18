@@ -31,4 +31,6 @@ curl https://bootstrap.pypa.io/pip/3.6/get-pip.py -o get-pip.py
 python3 get-pip.py --user
 python3 -m pip install --user ansible
 
-scp playbook.yaml  inventory.yaml  csaaguest@192.168.123.187:automation/
+scp playbook-local  csaaguest@192.168.123.187:~/
+
+ansible-playbook playbook-local.yaml
