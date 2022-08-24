@@ -86,6 +86,12 @@
        state: present
      become: yes
 
+   - name: Create a ssh config file
+     ansible.builtin.file:
+       path: ~/.gitconfig
+       state: touch
+       mode: '0700'
+
    - name: git configuration
      ansible.builtin.blockinfile:
        path: ~/.gitconfig
