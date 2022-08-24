@@ -36,17 +36,11 @@
        line: "export {{ item.key }}={{ item.value }}"
      with_items: "{{ os_environment }}"
          
-   - name: Reset ssh connection to allow user changes to affect
-     ansible.builtin.meta: reset_connection
-
    - name: Turn off Auto-Logout
      ansible.builtin.shell: |
        sed -i -e 's/TMOUT=[[:digit:]]\+/TMOUT=/g' /etc/profile
        sed -i -e 's/TMOUT=[[:digit:]]\+/TMOUT=/g' /etc/bashrc
      become: yes
-
-   - name: Reset ssh connection to allow user changes to affect
-     ansible.builtin.meta: reset_connection
 
    - name: Change file/folder default permissions
      ansible.builtin.shell: |
@@ -54,11 +48,17 @@
        sed -i -e 's/umask \+[[:digit:]]\+/umask 022/g' /etc/bashrc
      become: yes
 
-   - name: Reset ssh connection to allow user changes to affect
-     ansible.builtin.meta: reset_connection
+   - name: Create a ssh config directory
+     ansible.builtin.file:
+      path: ~/.ssh
+      state: directory
+      mode: '0700'
 
-   - name: Generate ssh config file
-     command: touch ~/.ssh/config
+   - name: Create a ssh config file
+     ansible.builtin.file:
+       path: ~/.ssh/config
+       state: touch
+       mode: '0700'
 
    - name: ssh configuration
      ansible.builtin.blockinfile:
@@ -235,9 +235,6 @@
       source ~/.nvm/nvm.sh
       nvm install lts/fermium
 
-   - name: Reset ssh connection to allow npm install to affect
-     ansible.builtin.meta: reset_connection
-
    - name: Configure npm - lts/fermium
      ansible.builtin.shell: |
       source ~/.nvm/nvm.sh
@@ -294,6 +291,3 @@
        systemctl start docker
        docker network create lambda-local
      become: yes
-
-   - name: Reset ssh connection to allow docker changes to affect
-     ansible.builtin.meta: reset_connection
