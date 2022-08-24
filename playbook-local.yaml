@@ -21,12 +21,6 @@
       - key: AWS_DEFAULT_REGION
         value: us-west-2
 
-#  vars_prompt:
-#   - name: email
-#     prompt: Whats is your email
-#     private: no
-
-
   tasks:
    - name: config csaa vars
      ansible.builtin.lineinfile:
