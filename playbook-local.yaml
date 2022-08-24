@@ -86,7 +86,7 @@
        state: present
      become: yes
 
-   - name: Create a ssh config file
+   - name: Create a git config file
      ansible.builtin.file:
        path: ~/.gitconfig
        state: touch
