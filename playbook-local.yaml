@@ -149,7 +149,7 @@
 
    - name: AWS CLI configuration
      ansible.builtin.blockinfile:
-       path: ~/.ssh/config
+       path: ~/.aws/config
        block: |
         [default]
         region=us-west-2
