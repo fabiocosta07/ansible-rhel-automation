@@ -146,6 +146,18 @@
        rm -rf aws awscliv2.zip
        mkdir ~/.aws
      when: result_aws is failed
+     
+   - name: Create a ssh config directory
+     ansible.builtin.file:
+      path: ~/.aws
+      state: directory
+      mode: '0700'
+
+   - name: Create a ssh config file
+     ansible.builtin.file:
+       path: ~/.aws/config
+       state: touch
+       mode: '0700'     
 
    - name: AWS CLI configuration
      ansible.builtin.blockinfile:
