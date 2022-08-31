@@ -147,13 +147,13 @@
        mkdir ~/.aws
      when: result_aws is failed
      
-   - name: Create a ssh config directory
+   - name: Create a aws config directory
      ansible.builtin.file:
       path: ~/.aws
       state: directory
       mode: '0700'
 
-   - name: Create a ssh config file
+   - name: Create a aws config file
      ansible.builtin.file:
        path: ~/.aws/config
        state: touch
