@@ -316,6 +316,7 @@
      ansible.builtin.command: docker network inspect lambda-local
      register: result_docker_config
      ignore_errors: true
+     become: yes
 
    - name: Config docker
      ansible.builtin.shell: |
