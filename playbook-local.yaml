@@ -312,19 +312,12 @@
        state: present
      become: yes
 
-   - name: Check docker configuration
-     ansible.builtin.command: docker network inspect lambda-local
-     register: result_docker_config
-     ignore_errors: true
-     become: yes
-
    - name: Config docker
      ansible.builtin.shell: |
        usermod -aG docker $USER
        systemctl enable docker
        systemctl start docker
      become: yes
-     when: result_docker_config is failed
      
    - name: Config lambda-local docker network
      ansible.builtin.shell: |
