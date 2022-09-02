@@ -320,9 +320,15 @@
 
    - name: Config docker
      ansible.builtin.shell: |
-       usermod -aG docker csaaguest
+       usermod -aG docker $USER
        systemctl enable docker
        systemctl start docker
-       docker network create lambda-local
      become: yes
      when: result_docker_config is failed
+     
+   - name: Config lambda-local docker network
+     ansible.builtin.shell: |
+       docker network create lambda-local
+     become: yes
+     ignore_errors: true
+
