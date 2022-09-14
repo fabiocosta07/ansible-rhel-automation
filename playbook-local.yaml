@@ -216,6 +216,29 @@
      ansible.builtin.shell: |
        python3 -m pip install --upgrade pip --user
        python3 -m pip install --upgrade gimme-aws-creds --user
+       
+   - name: Config python keyring - get file name
+     ansible.builtin.command: python3 -c "import keyring.util.platform_; print(keyring.util.platform_.config_root())"
+     register: keyring_folder
+
+   - name: Config python keyring - create folder
+     ansible.builtin.file:
+       path: {{ keyring_folder.stdout }}
+       state: directory
+       mode: '0700'       
+
+   - name: Config python keyring - create file
+     ansible.builtin.file:
+       path: {{ keyring_folder.stdout }}/keyringrc.cfg
+       state: touch
+       mode: '0700'
+
+   - name: Config python keyring - edit file
+     ansible.builtin.blockinfile:
+       path: {{ keyring_folder.stdout }}/keyringrc.cfg
+       block: |
+        [backend]
+        default-keyring=keyring.backends.fail.Keyring
 
    - name: Create octa config file
      ansible.builtin.file:
