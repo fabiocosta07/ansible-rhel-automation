@@ -3,11 +3,11 @@
   connection: local
   vars:
     ansible_become_method: sudo
-    ansible_become_pass: 123  
-    ansible_user: csaaguest
-    email: ze@uol.com
-    name: ze
-    token: token123    
+    ansible_become_pass: xxxxx
+    ansible_user: xjohndoe
+    email: john.doe@csaa.com
+    name: "John Doe"
+    token: git-hub-token123    
     os_environment:
       - key: CSAA_EMAIL
         value: "{{ email }}"
@@ -17,7 +17,7 @@
         value: "{{ token }}"
     aws_environment:
       - key: AWS_PROFILE
-        value: SSO-WebMyPolicyDeveloperRole
+        value: SSO-EzQuoteDeveloperRole
       - key: AWS_DEFAULT_REGION
         value: us-west-2
 
@@ -227,6 +227,7 @@
      ansible.builtin.blockinfile:
        path: ~/.okta_aws_login_config
        block: |
+        [DEFAULT]
         okta_org_url = https://csaa.okta.com
         okta_auth_server =
         client_id =
@@ -324,4 +325,3 @@
        docker network create lambda-local
      become: yes
      ignore_errors: true
-
