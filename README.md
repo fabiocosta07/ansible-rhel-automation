@@ -28,6 +28,15 @@ ansible-playbook -i inventory.yaml playbook.yaml --step
 
 ansible-playbook -i inventory.yaml playbook.yaml --start-at-task="install packages"
 
+### env vars
+
+Specify the location for the log file.
+
+export ANSIBLE_LOG_PATH=~/ansible.log
+
+Enable Debug
+
+export ANSIBLE_DEBUG=True
 
 ### Example of setting the debugger keyword on a task:
 
