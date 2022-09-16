@@ -229,13 +229,13 @@
 
    - name: Config python keyring - create file
      ansible.builtin.file:
-       path: "{{ keyring_folder.stdout }}"/keyringrc.cfg
+       path: "{{ keyring_folder.stdout }}/keyringrc.cfg"
        state: touch
        mode: '0700'
 
    - name: Config python keyring - edit file
      ansible.builtin.blockinfile:
-       path: "{{ keyring_folder.stdout }}"/keyringrc.cfg
+       path: "{{ keyring_folder.stdout }}/keyringrc.cfg"
        block: |
         [backend]
         default-keyring=keyring.backends.fail.Keyring
