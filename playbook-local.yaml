@@ -290,7 +290,7 @@
    - name: Configure npm - lts/fermium
      ansible.builtin.shell: |
       source ~/.nvm/nvm.sh
-      npm set //npm.pkg.github.com/:_authToken ${CSAA_GITHUB_TOKEN}
+      npm set //npm.pkg.github.com/:_authToken "{{ token }}"
       npm completion >> ~/.bashrc
 
    - name: Remove the default docker packages
